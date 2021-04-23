@@ -1,5 +1,7 @@
 <?php
-
+use app\models\Post;
+use yii\helpers\Url;
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
@@ -50,7 +52,9 @@ $this->title = 'My Yii Application';
         </div>
     </section>
 </div>
-
+<?php
+  $posts = Post::find()->all();
+?>
 <div class="row mb-4">
     <h2 class="col-6 tm-text-primary">
         Latest Photos
@@ -61,20 +65,43 @@ $this->title = 'My Yii Application';
         </form>
     </div>
 </div>
-<div class="row tm-mb-90 tm-gallery">
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-03.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Clocks</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">18 Oct 2020</span>
-            <span>9,906 views</span>
-        </div>
+<div class="container col-11 m-auto no-padding">
+    <h2 class="text-center m-5">fdsdf</h2>
+    <div class="owl-slide col-10 m-auto owl-carousel text-center owl-theme row">
+        <?php
+            foreach($posts as $post) {
+        ?>
+            <div class="product">
+                <a class="text-dark" href="<?= Url::to(['/product', 'id' => $posts->id]) ?>">
+                    <img class="product-image" src="img/img-03.jpg">
+                    <h5>asfasd</h5>
+                </a>
+            </div>
+        <?php
+            }
+        ?>
     </div>
+</div>
+<div class="row tm-mb-90 tm-gallery">
+    <?php
+        foreach($posts as $post) {
+    ?>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+            <figure class="effect-ming tm-video-item">
+                <img src="img/img-03.jpg" alt="Image" class="img-fluid">
+                <figcaption class="d-flex align-items-center justify-content-center">
+                    <h2>Clocks</h2>
+                    <a href="photo-detail.html">View more</a>
+                </figcaption>                    
+            </figure>
+            <div class="d-flex justify-content-between tm-text-gray">
+                <span class="tm-text-gray-light">18 Oct 2020</span>
+                <span>9,906 views</span>
+            </div>
+        </div>
+    <?php
+        }
+    ?>
     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
         <figure class="effect-ming tm-video-item">
             <img src="img/img-04.jpg" alt="Image" class="img-fluid">
