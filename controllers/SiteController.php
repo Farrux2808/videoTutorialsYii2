@@ -121,8 +121,31 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionAbout($id)
     {
-        return $this->render('about');
+        $model = \app\modules\admin\models\Post::find()->where(['category'=>$id])->all();
+        return $this->render('about', compact('model'));
+    }
+
+    /**
+     * Displays category page.
+     *
+     * @return string
+     */
+    public function actionCategory($id)
+    {
+        $model = \app\modules\admin\models\Post::find()->where(['category'=>$id])->all();
+        return $this->render('category', compact('model'));
+    }
+
+    /**
+     * Displays videos page.
+     *
+     * @return string
+     */
+    public function actionVideos()
+    {
+        $model = \app\modules\admin\models\Post::find()->all();
+        return $this->render('videos', compact('model'));
     }
 }

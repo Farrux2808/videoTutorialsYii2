@@ -1,10 +1,16 @@
 <?php
 use app\models\Post;
+use app\modules\admin\models\Category;
 use yii\helpers\Url;
 use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
+
+$posts = Post::find()->all();
+$categories = Category::find()->all();
+$i = 0;
+$j = 1;
 ?>
 
 <div data-parallax="scroll" data-image-src="img/edu3.jpg">
@@ -26,25 +32,13 @@ $this->title = 'My Yii Application';
                 <p>Sizni nima qiziqtiradi?</p>
                 <div class="interests">
                     <ul>
-                    <li><a href="#">Technology</a></li>
-                    <li><a href="#">Science</a></li>
-                    <li><a href="#">Design</a></li>
-                    <li><a href="#">Business</a></li>
-                    <li><a href="#">Collaboration</a></li>
-                    <li><a href="#">Innovation</a></li>
-                    <li><a href="#">Sochial change</a></li>
-                    <li><a href="#">Health</a></li>
-                    <li><a href="#">Nature</a></li>
-                    <li><a href="#">The environment</a></li>
-                    <li><a href="#">The future</a></li>
-                    <li><a href="#">Communication</a></li>
-                    <li><a href="#">Activism</a></li>
-                    <li><a href="#">Child development</a></li>
-                    <li><a href="#">Personal growth</a></li>
-                    <li><a href="#">Humanity</a></li>
-                    <li><a href="#">Soceity</a></li>
-                    <li><a href="#">Identity</a></li>
-                    <li><a href="#">Community</a></li>
+                    <?php
+                        foreach($categories as $cat) {
+                    ?>
+                    <li><a href="<?=\yii\helpers\Url::to(['category', 'id'=>$cat['id']])?>"><?=$cat['name'];?></a></li>
+                    <?php
+                        }
+                    ?>
                     </ul>
                 </div>
                 </div>
@@ -52,262 +46,46 @@ $this->title = 'My Yii Application';
         </div>
     </section>
 </div>
-<?php
-  $posts = Post::find()->all();
-?>
-<div class="row mb-4">
-    <h2 class="col-6 tm-text-primary">
-        Latest Photos
-    </h2>
-    <div class="col-6 d-flex justify-content-end align-items-center">
-        <form action="" class="tm-text-primary">
-            Page <input type="text" value="1" size="1" class="tm-input-paging tm-text-primary"> of 200
-        </form>
-    </div>
-</div>
-<div class="container col-11 m-auto no-padding">
-    <h2 class="text-center m-5">fdsdf</h2>
-    <div class="owl-slide col-10 m-auto owl-carousel text-center owl-theme row">
-        <?php
-            foreach($posts as $post) {
-        ?>
-            <div class="product">
-                <a class="text-dark" href="<?= Url::to(['/product', 'id' => $posts->id]) ?>">
-                    <img class="product-image" src="img/img-03.jpg">
-                    <h5>asfasd</h5>
-                </a>
-            </div>
-        <?php
-            }
-        ?>
-    </div>
-</div>
 <div class="row tm-mb-90 tm-gallery">
     <?php
-        foreach($posts as $post) {
+        foreach($categories as $cat) {
+            $j = 1;
     ?>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-03.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Clocks</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>                    
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">18 Oct 2020</span>
-                <span>9,906 views</span>
+    <div class="container text-center my-3">
+        <h3 class="tm-text-primary"><?=$cat['name'];?></h3>
+        <div id="recipeCarousel<?=$i?>" class="carousel slide w-100" data-ride="carousel">
+            <div class="carousel-inner w-100" role="listbox">
+                <div class="carousel-item row no-gutters active">
+                <?php
+                    foreach($posts as $post) {
+                        if ($cat['id'] == $post['category']) {
+                ?>
+                    <div class="col-3 float-left tm-text-gray">
+                        <iframe width="100%"  src="<?=$post['url'];?>" title="<?=$post['name'];?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <span><?=$post['author'];?></span>
+                    </div>
+                <?php
+                    if ($j == 4){
+                        echo '</div><div class="carousel-item row no-gutters">';
+                        $j = 0;
+                    }
+                    $j++;
+                }
+                }
+                ?>
+                </div>
             </div>
+            <a class="carousel-control-prev" href="#recipeCarousel<?=$i?>" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#recipeCarousel<?=$i?>" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
+    </div>
     <?php
-        }
-    ?>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-04.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Plants</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">14 Oct 2020</span>
-            <span>16,100 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-05.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Morning</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">12 Oct 2020</span>
-            <span>12,460 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-06.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Pinky</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">10 Oct 2020</span>
-            <span>11,402 views</span>
-        </div>
-    </div>
-    
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-01.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Hangers</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">24 Sep 2020</span>
-            <span>16,008 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-02.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Perfumes</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">20 Sep 2020</span>
-            <span>12,860 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-07.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Bus</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">16 Sep 2020</span>
-            <span>10,900 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-08.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>New York</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">12 Sep 2020</span>
-            <span>11,300 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-09.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Abstract</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">10 Sep 2020</span>
-            <span>42,700 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-10.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Flowers</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">8 Sep 2020</span>
-            <span>11,402 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-11.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Rosy</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">4 Sep 2020</span>
-            <span>32,906 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-12.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Rocki</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">28 Aug 2020</span>
-            <span>50,700 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-13.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Purple</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">22 Aug 2020</span>
-            <span>107,510 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-14.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Sea</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">14 Aug 2020</span>
-            <span>118,006 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-15.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Turtle</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">9 Aug 2020</span>
-            <span>121,300 views</span>
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <figure class="effect-ming tm-video-item">
-            <img src="img/img-16.jpg" alt="Image" class="img-fluid">
-            <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>Peace</h2>
-                <a href="photo-detail.html">View more</a>
-            </figcaption>                    
-        </figure>
-        <div class="d-flex justify-content-between tm-text-gray">
-            <span class="tm-text-gray-light">3 Aug 2020</span>
-            <span>21,204 views</span>
-        </div>
-    </div>         
-</div> <!-- row -->
-<div class="row tm-mb-90">
-    <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
-        <a href="javascript:void(0);" class="btn btn-primary tm-btn-prev mb-2 disabled">Previous</a>
-        <div class="tm-paging d-flex">
-            <a href="javascript:void(0);" class="active tm-paging-link">1</a>
-            <a href="javascript:void(0);" class="tm-paging-link">2</a>
-            <a href="javascript:void(0);" class="tm-paging-link">3</a>
-            <a href="javascript:void(0);" class="tm-paging-link">4</a>
-        </div>
-        <a href="javascript:void(0);" class="btn btn-primary tm-btn-next">Next Page</a>
-    </div>            
+        $i++;}
+    ?>        
 </div>

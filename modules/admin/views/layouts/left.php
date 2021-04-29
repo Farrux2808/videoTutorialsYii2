@@ -34,6 +34,7 @@
                     ['label' => 'Asosiy', 'icon' => 'dashboard', 'url' => ['/admin']],
                     ['label' => 'Post', 'icon' => 'dashboard', 'url' => ['/admin/post']],
                     ['label' => 'Kategorya', 'icon' => 'dashboard', 'url' => ['/admin/category']],
+                    ['label' => 'Bizning jamo', 'icon' => 'dashboard', 'url' => ['/admin/users']],
                 ],
             ]
         ) ?>

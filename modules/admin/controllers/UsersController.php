@@ -3,16 +3,17 @@
 namespace app\modules\admin\controllers;
 
 use Yii;
-use app\modules\admin\models\Post;
-use app\modules\admin\models\PostSearch;
+use app\modules\admin\models\Users;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
- * PostController implements the CRUD actions for Post model.
+ * UsersController implements the CRUD actions for Users model.
  */
-class PostController extends Controller
+class UsersController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,22 +31,22 @@ class PostController extends Controller
     }
 
     /**
-     * Lists all Post models.
+     * Lists all Users models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Users::find(),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Post model.
+     * Displays a single Users model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,23 +59,17 @@ class PostController extends Controller
     }
 
     /**
-     * Creates a new Post model.
+     * Creates a new Users model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Post();
+        $model = new Users();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $url = $model->url;
-            if (stripos($url, "watch")){
-                $start = stripos($url,'?v=')+3;
-                $end = stripos($url, '&');
-                $url = "https://youtube.com/embed/".substr($url, $start, $end-$start);
-            }
-            $model->url = $url;
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            $model->upload();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -84,7 +79,7 @@ class PostController extends Controller
     }
 
     /**
-     * Updates an existing Post model.
+     * Updates an existing Users model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,15 +89,7 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $url = $model->url;
-            if (stripos($url, "watch")){
-                $start = stripos($url,'?v=')+3;
-                $end = stripos($url, '&');
-                $url = "https://youtube.com/embed/".substr($url, $start, $end-$start);
-            }
-            $model->url = $url;
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -112,7 +99,7 @@ class PostController extends Controller
     }
 
     /**
-     * Deletes an existing Post model.
+     * Deletes an existing Users model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -126,15 +113,15 @@ class PostController extends Controller
     }
 
     /**
-     * Finds the Post model based on its primary key value.
+     * Finds the Users model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Post the loaded model
+     * @return Users the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Post::findOne($id)) !== null) {
+        if (($model = Users::findOne($id)) !== null) {
             return $model;
         }
 

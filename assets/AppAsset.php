@@ -24,7 +24,7 @@ class AppAsset extends AssetBundle
         'fontawesome/css/all.min.css',
         'css/templatemo-style.css',
         'css/ted.css',
-        'css/style.css'        
+        // 'css/style.css'        
     ];
     public $js = [
         'js/plugins.js'
