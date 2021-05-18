@@ -14,7 +14,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'full_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'file')->fileInput() ?>
+    <?php if($model->img!=''):?>
+        <img src="/<?=\Yii::getAlias('@web').$model->img?>" width='200px'>
+    <?php endif?>
+
+    <?= $form->field($model, 'img')->fileInput() ?>
 
     <?= $form->field($model, 'about')->textarea(['rows' => 6]) ?>
 
